@@ -1,0 +1,33 @@
+---
+# tasks file for packages_fail2ban
+
+# Debian
+- block:
+  #sudo apt-get update
+  - name: APT - Update
+    become: true
+    ansible.builtin.apt:
+      update_cache: yes
+      cache_valid_time: 86400 #One day
+
+  #sudo apt-get -y install fail2ban
+  - name: APT - install fail2ban
+    become: true
+    ansible.builtin.apt:
+      pkg: fail2ban
+      state: present
+  when: ansible_os_family == 'Debian'
+
+#sudo systemctl enable --now fail2ban
+- name: SERVICE - Ensure fail2ban service enabled
+  become: true
+  ansible.builtin.service:
+    name: fail2ban
+    enabled: yes
+
+#sudo service fail2ban start
+- name: SERVICE - Ensure fail2ban service started
+  become: true
+  ansible.builtin.service:
+    name: fail2ban
+    state: started

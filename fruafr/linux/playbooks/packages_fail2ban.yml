@@ -1,0 +1,10 @@
+---
+# Install fail2ban - intrusion prevention
+# Author: David HEURTEVENT
+# Date : 2023-09-18
+- hosts: all
+  become: true
+  collections:
+    - fruafr.linux
+  roles:
+    - packages_fail2ban

@@ -3,6 +3,7 @@
 
 #User must be present in group
 - name: "User {{ username }} present (removed if needed)"
+  become: true
   ansible.builtin.user:
     name: "{{ username }}"
     groups: "{{ groupname }}"

@@ -1,0 +1,17 @@
+---
+# Change the hostname
+# Author: David HEURTEVENT
+# Date : 2023-07-09
+- hosts: all
+  become: true
+  vars_prompt:
+    - name: "hostname"
+      prompt: "Enter the new hostname"
+      private: no
+    - name: "fqdn"
+      prompt: "Enter the new fully-qualified domain name"
+      private: no
+  collections:
+    - fruafr.linux
+  roles:
+    - hostname_change

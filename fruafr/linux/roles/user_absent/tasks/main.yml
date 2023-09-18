@@ -1,6 +1,7 @@
 ---
 # tasks file for user_absent
 - name: "User {{ username }} absent (removed if needed)"
+  become: true
   ansible.builtin.user:
     name: "{{ username }}"
     state: absent

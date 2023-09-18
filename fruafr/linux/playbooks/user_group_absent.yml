@@ -1,13 +1,6 @@
 # User absent in group
 - hosts: all
   become: true
-  vars_prompt: 
-    - name: "username" 
-      prompt: "Enter the username" 
-      private: no
-    - name: "groupname" 
-      prompt: "Enter the group name" 
-      private: no
   collections:
     - fruafr.linux
   roles:

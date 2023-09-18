@@ -3,6 +3,10 @@
 #https://docs.ansible.com/ansible/latest/collections/ansible/builtin/user_module.html
 - hosts: all
   become: true
+  vars_prompt: 
+    - name: "username" 
+      prompt: "Enter the username" 
+      private: no 
   collections:
     - fruafr.linux
   roles:

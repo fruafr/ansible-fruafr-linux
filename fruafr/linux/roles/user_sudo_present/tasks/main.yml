@@ -3,12 +3,14 @@
 # User present in sudo group (added if necessary)
 
 - name: Sudo package must be installed
+  become: true
   ansible.builtin.package:
     name: sudo
     state: present
   register: sudopresent
 
 - name: "User {{ username }} in sudo group"
+  become: true
   ansible.builtin.user:
     name: "{{ username }}"
     groups: sudo

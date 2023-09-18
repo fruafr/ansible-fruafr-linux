@@ -3,6 +3,7 @@
 # Generate a ssh key for the user
 
 - name: "Generate a ssh key for user {{ username }}"
+  become: true
   ansible.builtin.user:
     name: "{{ username }}"
     generate_ssh_key: yes

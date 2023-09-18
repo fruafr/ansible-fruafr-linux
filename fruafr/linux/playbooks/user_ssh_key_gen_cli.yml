@@ -1,9 +1,13 @@
 ---
-#User is absent (Remove the user and its home directory if necessary)
+#Generate a ssh key for a user
 #https://docs.ansible.com/ansible/latest/collections/ansible/builtin/user_module.html
 - hosts: all
   become: true
+  vars_prompt: 
+    - name: "username" 
+      prompt: "Enter the username" 
+      private: no 
   collections:
     - fruafr.linux
   roles:
-    - user_absent
+    - user_ssh_key_gen

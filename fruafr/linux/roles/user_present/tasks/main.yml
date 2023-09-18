@@ -2,6 +2,7 @@
 # tasks file for user_present
 # useradd user
 - name: "Create the user {{ username }} if it does not exist"
+  become: true
   ansible.builtin.user:
     name: "{{ username }}"
     state: present

@@ -11,6 +11,6 @@
 - name: "User {{ username }} in sudo group"
   ansible.builtin.user:
     name: "{{ username }}"
-    group: sudo
+    groups: sudo
     append: true
   when: sudopresent is defined

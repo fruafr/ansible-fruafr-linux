@@ -5,6 +5,6 @@
 - name: "User {{ username }} present (removed if needed)"
   ansible.builtin.user:
     name: "{{ username }}"
-    group: "{{ groupname }}"
+    groups: "{{ groupname }}"
     state: present
     append: true

@@ -1,0 +1,33 @@
+---
+# tasks file for packages_ufw
+
+# Debian
+- block:
+  #sudo apt-get update
+  - name: APT - Update
+    become: true
+    ansible.builtin.apt:
+      update_cache: yes
+      cache_valid_time: 86400 #One day
+  
+  #sudo apt-get -y install ufw iptables
+  - name: APT - install ufw iptables
+    apt:
+      pkg: 
+        - iptables
+        - ufw
+      state: present
+  when: ansible_os_family == 'Debian'
+
+
+#sudo systemctl enable --now ufw
+- name: SERVICE - Ensure ufw service enabled
+  service:
+    name: ufw
+    enabled: yes
+
+#sudo systemctl start ufw
+- name: SERVICE - Ensure ufw service started
+  service:
+    name: ufw
+    state: started

@@ -1,0 +1,10 @@
+---
+# Install ufw (+ iptables) - firewall
+# Author: David HEURTEVENT
+# Date : 2023-09-18
+- hosts: all
+  become: true
+  collections:
+    - fruafr.linux
+  roles:
+    - packages_ufw

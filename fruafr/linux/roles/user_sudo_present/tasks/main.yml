@@ -1,0 +1,16 @@
+---
+# tasks file for user_sudo_add
+# User present in sudo group (added if necessary)
+
+- name: Sudo package must be installed
+  ansible.builtin.package:
+    name: sudo
+    state: present
+  register: sudopresent
+
+- name: "User {{ username }} in sudo group"
+  ansible.builtin.user:
+    name: "{{ username }}"
+    group: sudo
+    append: true
+  when: sudopresent is defined

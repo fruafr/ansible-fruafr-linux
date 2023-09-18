@@ -7,4 +7,4 @@
   collections:
     - fruafr.linux
   roles:
-    - reset_localhost
+    - localhost_reset

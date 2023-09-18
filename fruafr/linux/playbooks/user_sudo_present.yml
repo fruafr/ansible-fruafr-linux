@@ -1,0 +1,11 @@
+# User present in sudo group (added if necessary)
+- hosts: all
+  become: true
+  vars_prompt: 
+    - name: "username" 
+      prompt: "Enter the username" 
+      private: no 
+  collections:
+    - fruafr.linux
+  roles:
+    - user_sudo_present

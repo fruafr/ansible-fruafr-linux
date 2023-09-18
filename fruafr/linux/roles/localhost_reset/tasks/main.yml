@@ -1,5 +1,5 @@
 ---
-# tasks file for reset_localhost
+# tasks file for localhost_reset
 
 # Reset the localhost records in the /etc/hosts file
 - name: Remove the line in the /etc/hosts file for 127.0.0.1

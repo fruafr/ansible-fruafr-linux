@@ -1,0 +1,18 @@
+---
+# tasks file for user_group_absent
+
+#User must be absent from group
+- block:
+  - name: "User {{ username }} absent from group {{ groupname }} (removed if needed) using deluser"
+    shell: "deluser {{ username }} {{ groupname }}"
+    when: ansible_os_family == 'Debian'
+    register: msg
+
+  - name: "User {{ username }} absent from group {{ groupname }} (removed if needed) using gpasswd"
+    shell: "gpasswd -d {{ username }} {{ groupname }}"
+    when: ansible_os_family != 'Debian'
+    register: msg
+
+- name: 'output'
+  debug: var=msg.stdout_lines
+

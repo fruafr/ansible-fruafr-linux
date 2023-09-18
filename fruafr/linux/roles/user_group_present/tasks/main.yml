@@ -1,0 +1,10 @@
+---
+# tasks file for user_group_present
+
+#User must be present in group
+- name: "User {{ username }} present (removed if needed)"
+  ansible.builtin.user:
+    name: "{{ username }}"
+    group: "{{ groupname }}"
+    state: present
+    append: true

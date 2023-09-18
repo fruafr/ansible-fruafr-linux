@@ -1,0 +1,10 @@
+---
+# tasks file for user_password_set
+# Set the user password
+
+#passwd user
+- name: "Set the password for user {{ username }}"
+  ansible.builtin.user:
+    name: "{{ username }}"
+    password: "{{ password | password_hash('sha512') }}"
+  when: user_exists is succeeded

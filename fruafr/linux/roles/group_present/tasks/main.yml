@@ -1,0 +1,6 @@
+---
+# tasks file for group_present
+- name: "group {{ groupname }} present (created if needed)"
+  ansible.builtin.group:
+    name: "{{ groupname }}"
+    state: present

@@ -1,0 +1,7 @@
+---
+# tasks file for group_absent
+- name: "group {{ groupname }} absent (removed if needed)"
+  ansible.builtin.group:
+    name: "{{ groupname }}"
+    state: absent
+    force: "{{ force }}"

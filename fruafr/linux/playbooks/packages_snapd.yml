@@ -1,0 +1,9 @@
+---
+# Install snapd
+# Author: David HEURTEVENT
+# Date : 2023-09-17
+- hosts: all
+  collections:
+    - fruafr.linux
+  roles:
+    - packages_snapd

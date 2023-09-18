@@ -1,0 +1,10 @@
+---
+# Install hardware sensors packages
+# Author: David HEURTEVENT
+# Date : 2023-09-17
+- hosts: all
+  become: true
+  collections:
+    - fruafr.linux
+  roles:
+    - packages_hwsensors

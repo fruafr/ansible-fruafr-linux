@@ -1,0 +1,36 @@
+---
+# tasks file for packages_snapd
+# Install snapd
+#https://snapcraft.io/docs/installing-snap-on-debian
+
+# Debian
+- block:
+
+  # tasks file for packages_snapd
+  - name: 'Check if snapd is installed'
+    command: "dpkg-query -W snapd"
+    register: package
+    failed_when: package.rc > 1
+    changed_when: package.rc == 1
+
+  #When not installed
+  - block:
+    #sudo apt-get update && sudo apt-get install -y snapd
+    - name: 'APT update and snapd installed'
+      become: true
+      ansible.builtin.apt:
+        pkg:
+          - snapd
+        state: latest
+        update_cache: yes
+        cache_valid_time: 86400 #One day
+
+    #sudo snap install core
+    - name: 'install snap core'
+      community.general.snap:
+        name: core
+
+    when: package.rc == 1
+  
+  when: ansible_os_family == 'Debian'
+

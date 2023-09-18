@@ -1,0 +1,5 @@
+---
+# tasks file for system_reboot
+- name: Reboot
+  become: true
+  ansible.builtin.command: "reboot"

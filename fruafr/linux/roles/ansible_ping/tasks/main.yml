@@ -1,0 +1,4 @@
+---
+# tasks file for ansible_ping
+- name: "Check that ansible is reachable on target machine"
+  ansible.builtin.ping:

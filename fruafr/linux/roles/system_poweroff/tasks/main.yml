@@ -1,0 +1,5 @@
+---
+# tasks file for system_poweroff
+- name: poweroff
+  become: true
+  ansible.builtin.command: "poweroff"

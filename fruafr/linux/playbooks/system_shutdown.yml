@@ -1,0 +1,10 @@
+---
+# Shutdown
+# Author: David HEURTEVENT
+# Date : 2023-07-09
+- hosts: all
+  become: true
+  collections:
+    - fruafr.linux
+  roles:
+    - system_shutdown

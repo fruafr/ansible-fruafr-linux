@@ -1,0 +1,42 @@
+---
+# tasks file for packages_hwsensors
+
+# Debian
+- block:
+  # apt-get install hwinfo lm-sensors smartmontools
+  - name : 'DEBIAN - Useful hardware sensors packages : hwinfo, lm-sensors, smartmontools'
+    become: true
+    ansible.builtin.apt:
+      pkg:
+        - hwinfo
+        - lm-sensors
+        - smartmontools
+      state: latest
+      update_cache: true
+
+  - name: Add the drivetemp module
+    become: true 
+    # modprobe drivetemp
+    # echo drivetemp > /etc/modules-load.d/drivetemp.conf
+    # echo drivetemp | sudo tee -a /etc/modules 
+    community.general.modprobe:
+      name: drivetemp
+      state: present
+
+  when: ansible_os_family == 'Debian'
+
+# Read hwinfo
+- shell: hwinfo
+  become: true
+  register: hw
+
+- name: Read hardware info values (hwinfo)
+  debug: var=hw.stdout_lines
+
+# Read sensors information
+- shell: sensors
+  become: true
+  register: sens
+
+- name: Read sensors values (sensors)
+  debug: var=sens.stdout_lines

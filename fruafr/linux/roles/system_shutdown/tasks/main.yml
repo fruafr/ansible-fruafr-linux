@@ -1,0 +1,5 @@
+---
+# tasks file for system_shutdown
+- name: Shutdown
+  become: true
+  ansible.builtin.command: "shutdown"

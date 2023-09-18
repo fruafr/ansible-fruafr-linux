@@ -1,0 +1,124 @@
+---
+# tasks file for reset_localhost
+
+# Reset the localhost records in the /etc/hosts file
+- name: Remove the line in the /etc/hosts file for 127.0.0.1
+  become: true
+  lineinfile:
+    path: "/etc/hosts"
+    regexp: "127.0.0.1.*"
+    state: absent
+
+- name: Remove the line in the /etc/hosts file for ::1
+  become: true
+  lineinfile:
+    path: "/etc/hosts"
+    regexp: "::1.*"
+    state: absent
+
+- name: Remove the line in the /etc/hosts file for fe00::0
+  become: true
+  lineinfile:
+    path: "/etc/hosts"
+    regexp: "fe00::0.*"
+    state: absent
+
+- name: Remove the line in the /etc/hosts file for ff00::0
+  become: true
+  lineinfile:
+    path: "/etc/hosts"
+    regexp: "ff00::0.*"
+    state: absent
+
+- name: Remove the line in the /etc/hosts file for ff02::1
+  become: true
+  lineinfile:
+    path: "/etc/hosts"
+    regexp: "ff02::1.*"
+    state: absent
+
+- name: Remove the line in the /etc/hosts file for ff02::2
+  become: true
+  lineinfile:
+    path: "/etc/hosts"
+    regexp: "ff02::2.*"
+    state: absent
+
+- name: Remove the line in the /etc/hosts file for ff02::3
+  become: true
+  lineinfile:
+    path: "/etc/hosts"
+    regexp: "ff02::3.*"
+    state: absent
+
+- name: Reset the /etc/hosts file for 127.0.0.1
+  become: true
+  lineinfile:
+    path: "/etc/hosts"
+    line: "127.0.0.1 localhost localhost.localdomain"
+    insertbefore: '^# The following lines'
+    state: present
+
+- name: Reset the /etc/hosts file for ff02::3
+  become: true
+  lineinfile:
+    path: "/etc/hosts"
+    line: "ff02::3 ip6-allhosts"
+    insertafter: '^# The following lines'
+    state: present
+
+- name: Reset the /etc/hosts file for ff02::2
+  become: true
+  lineinfile:
+    path: "/etc/hosts"
+    line: "ff02::2 ip6-allrouters"
+    insertafter: '^# The following lines'
+    state: present
+
+- name: Reset the /etc/hosts file for ff02::1
+  become: true
+  lineinfile:
+    path: "/etc/hosts"
+    line: "ff02::1 ip6-allnodes"
+    insertafter: '^# The following lines'
+    state: present
+
+- name: Reset the /etc/hosts file for ff00::0
+  become: true
+  lineinfile:
+    path: "/etc/hosts"
+    line: "ff00::0 ip6-mcastprefix"
+    insertafter: '^# The following lines'
+    state: present
+
+- name: Reset the /etc/hosts file for fe00::0
+  become: true
+  lineinfile:
+    path: "/etc/hosts"
+    line: "fe00::0 ip6-localnet"
+    insertafter: '^# The following lines'
+    state: present
+
+- name: Reset the /etc/hosts file for ::1
+  become: true
+  lineinfile:
+    path: "/etc/hosts"
+    line: "::1 localhost ip6-localhost ip6-loopback"
+    insertafter: '^# The following lines'
+    state: present
+
+- name: Blank Line
+  become: true
+  lineinfile:
+    path: "/etc/hosts"
+    line: " "
+    insertbefore: '^# The following lines'
+    state: present
+
+- name: Backup the file
+  become: true
+  lineinfile:
+    path: "/etc/hosts"
+    line: " "
+    insertafter: '^# The following lines'
+    backup: yes

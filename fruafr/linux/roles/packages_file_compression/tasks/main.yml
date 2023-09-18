@@ -1,0 +1,29 @@
+---
+# tasks file for packages_file_compression
+
+# Debian
+- block:
+  # sudo apt-get install [packages]
+  - name: 'DEBIAN - file compression packages installed : zip, bzip2, bzip3, arc, 7zip, p7zip, rar, cabextract'
+    become: true
+    ansible.builtin.apt:
+      pkg:
+        - zip
+        - bzip2
+        - arc
+        - 7zip
+        - p7zip
+        - rar
+        - cabextract
+      state: latest
+    
+  #bzip3 only found in Debian for the time being
+  - name: 'DEBIAN - file compression packages installed : bzip3'
+    become: true
+    ansible.builtin.apt:
+      pkg:
+        - bzip3
+      state: latest
+    when: (ansible_distribution == 'Debian') and (ansible_distribution_major_version >= 12)
+    
+  when: ansible_os_family == 'Debian'

@@ -1,0 +1,10 @@
+---
+# Install network administration packages
+# Author: David HEURTEVENT
+# Date : 2023-09-17
+- hosts: all
+  become: true
+  collections:
+    - fruafrlinux
+  roles:
+    - packages_network_admin

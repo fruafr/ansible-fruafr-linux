@@ -1,0 +1,50 @@
+---
+# tasks file for packages_base
+
+# Debian
+- block:
+  # apt-get install [packages]
+  - name : 'DEBIAN - Base system packages installed : nano, curl, ca-certificates, gnupg, wget, cron, vim-common, tar, gzip, zlib1g'
+    become: true
+    ansible.builtin.apt:
+      pkg:
+        - nano
+        - curl
+        - ca-certificates
+        - gnupg
+        - wget
+        - cron
+        - vim-common
+        - tar
+        - gzip
+        - zlib1g
+      state: latest
+      update_cache: true
+
+  - name: 'DEBIAN - Typical base system packages found in Ubuntu 22.04 installed : sudo, git, lsb-release, rsync, gpg, zfsutils-linux, software-properties-common, vim, screen, parted'
+    become: true
+    ansible.builtin.apt:
+      pkg:
+        - sudo
+        - git
+        - lsb-release
+        - rsync
+        - gpg
+        - zfsutils-linux
+        - software-properties-common
+        - vim
+        - screen
+        - parted
+      state: latest
+
+  - name: 'DEBIAN - useful system packages installed : nfs-common, htop, apt-transport-https, memstat'
+    become: true
+    ansible.builtin.apt:
+      pkg:
+        - nfs-common
+        - htop
+        - apt-transport-https
+        - memstat
+      state: latest
+
+  when: ansible_os_family == 'Debian'

@@ -1,0 +1,10 @@
+---
+# Test snapd with hello-world
+# Author: David HEURTEVENT
+# Date : 2023-09-18
+- hosts: all
+  become: true
+  collections:
+    - fruafr.linux
+  roles:
+    - packages_snapd_test

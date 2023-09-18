@@ -1,9 +1,0 @@
----
-# Check that hosts in the inventory are alive
-# Author: David HEURTEVENT
-# Date : 2023-09-17
-- hosts: all
-  collections:
-    - fruafr.linux
-  roles:
-    - ansible_ping

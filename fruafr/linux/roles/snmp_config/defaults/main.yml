@@ -1,0 +1,4 @@
+---
+# defaults file for snmp_config
+snmp_config_file: '/etc/snmp/snmpd.conf'
+snmp_default_agentaddress: '127.0.0.1,[::1]'

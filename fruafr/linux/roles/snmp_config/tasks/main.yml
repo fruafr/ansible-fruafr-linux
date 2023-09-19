@@ -3,7 +3,7 @@
 - name: Replace sysLocation
   become: true
   replace: 
-    path: "{{ snmpd_config_file }}"
+    path: "{{ snmp_config_file }}"
     regexp: '(^sysLocation\s)(.*)$'
     replace: "\\1 {{ sysLocation }}"
     backup: yes
@@ -12,7 +12,7 @@
 - name: Replace sysContact
   become: true
   replace: 
-    path: "{{ snmpd_config_file }}"
+    path: "{{ snmp_config_file }}"
     regexp: '(^sysContact\s)(.*)$'
     replace: "\\1 {{ sysContact }}"
   when: sysContact is defined
@@ -21,7 +21,7 @@
   - name: Replace agentaddress
     become: true
     replace: 
-      path: "{{ snmpd_config_file }}"
+      path: "{{ snmp_config_file }}"
       regexp: '(^agentaddress\s)(.*)$'
       replace: "\\1 {{ agentaddress | regex_escape() }}"
     register: agentaddress_set 
@@ -30,9 +30,9 @@
   - name: Replace agentaddress by default
     become: true
     replace:
-      path: "{{ snmpd_config_file }}"
+      path: "{{ snmp_config_file }}"
       regexp: '(^agentaddress\s)(.*)$'
-      replace: "\\1 {{ snmpd_default_agentaddress }}"
+      replace: "\\1 {{ snmp_default_agentaddress }}"
     when: not (agentaddress is defined)
 
   #Add community to the new config file:

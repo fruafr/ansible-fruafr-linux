@@ -36,40 +36,40 @@
     when: not (agentaddress is defined)
 
   #Add community to the new config file:
-  #echo “rocommunity [rocommunitystring]”>/etc/snmp/snmpd.conf
+  #echo “rocommunity [rocommunitydetails]”>/etc/snmp/snmpd.conf
   - name: SNMPD - Add read only community 
     become: true
     ansible.builtin.lineinfile:
       path: '/etc/snmp/snmpd.conf'
       state: present
-      line: "rocommunity {{ rocommunitystring }}"
-    when: rocommunitystring is defined
+      line: "rocommunity {{ rocommunitydetails }}"
+    when: rocommunitydetails is defined
 
   - name: SNMPD - Add read only community IPv6
     become: true
     ansible.builtin.lineinfile:
       path: '/etc/snmp/snmpd.conf'
       state: present
-      line: "rocommunity6 {{ rocommunitystring }}"
-    when: rocommunitystring is defined
+      line: "rocommunity6 {{ rocommunitydetails }}"
+    when: rocommunitydetails is defined
 
   #Add community to the new config file:
-  #echo “rwcommunity [rwcommunitystring]”>/etc/snmp/snmpd.conf
+  #echo “rwcommunity [rwcommunitydetails]”>/etc/snmp/snmpd.conf
   - name: SNMPD - Add read write community 
     become: true
     ansible.builtin.lineinfile:
       path: '/etc/snmp/snmpd.conf'
       state: present
-      line: "rwcommunity {{ rwcommunitystring }}"
-    when: rwcommunitystring is defined
+      line: "rwcommunity {{ rwcommunitydetails }}"
+    when: rwcommunitydetails is defined
 
   - name: SNMPD - Add read write community IPv6
     become: true
     ansible.builtin.lineinfile:
       path: '/etc/snmp/snmpd.conf'
       state: present
-      line: "rwcommunity6 {{ rwcommunitystring }}"
-    when: rwcommunitystring is defined
+      line: "rwcommunity6 {{ rwcommunitydetails }}"
+    when: rwcommunitydetails is defined
 
 - name: SERVICE - Ensure snmpd service reloaded
   become: true

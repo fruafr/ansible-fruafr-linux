@@ -1,0 +1,51 @@
+---
+# tasks file for packages_etckeeper
+
+# Debian
+- block:
+  #sudo apt-get update
+  - name: APT - Update
+    become: true
+    ansible.builtin.apt:
+      update_cache: yes
+      cache_valid_time: 86400 #One day
+
+  #sudo apt-get install etckeeper
+  - name: APT - install etckeeper
+    apt:
+      pkg: etckeeper
+      state: present
+  when: ansible_os_family == 'Debian'
+
+
+#systemctl enable --now etckeeper
+- name: SERVICE - Ensure etckeeper service enabled
+  service:
+    name: etckeeper
+    enabled: yes
+
+#systemctl start etckeeper
+- name: SERVICE - Ensure etckeeper service started
+  service:
+    name: etckeeper
+    state: started
+
+#ls /etc/.git
+- name: Test if /etc/.git is present
+  stat:
+    path: /etc/.git
+  register: etc_git
+
+#mkdir /etc/.git
+- name: ETCKEEPER - Initialize if /etc/.git not present
+  command:
+    cmd: etckeeper init
+    creates: /etc/.git
+  when: etc_git.stat.exists == false
+  register: etc_initialized
+
+#etckeeper commit "Initial commit"
+- name: ETCKEEPER - Initial commit if initialized
+  command:
+    cmd: etckeeper commit "Initial commit"
+  when: etc_initialized is not skipped

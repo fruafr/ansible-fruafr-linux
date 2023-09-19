@@ -1,8 +1,11 @@
 ---
 # tasks file for packages_snmpd
-#Source : https://wiki.esia-sa.com/tierce/snmp_proxmox
+#Source : 
+# - https://wiki.esia-sa.com/tierce/snmp_proxmox
+# - https://www.comparitech.com/net-admin/snmp-community-strings-windows-linux/
 
-# Debian
+# Install packages
+## Debian
 - block:
   #sudo apt-get update
   - name: APT - Update
@@ -10,7 +13,8 @@
     ansible.builtin.apt:
       update_cache: yes
       cache_valid_time: 86400 #One day
-
+  
+  #Install the snmpd package by entering the following:
   #sudo apt-get -y install snmpd
   - name: APT - install snmpd
     become: true
@@ -21,9 +25,72 @@
 
   when: ansible_os_family == 'Debian'
 
+## RedHat/CentOS
+- block:
+  - name: YUM - install updates
+    become: true
+    ansible.builtin.yum: 
+      update_cache: yes
+  
+    #Firstly, install the RPM by entering the following command:
+    #yum install net-snmp
+    #At this stage you can install snmpwalk to aid your troubleshooting with the following:
+    #yum install net-snmp-utils
+  - name: YUM - install net-snmp net-snmp-utils
+    become: true
+    ansible.builtin.yum: 
+      name:
+        - net-snmp
+        - net-snmp-utils
+    register: snmpd_installed
+
+  when: ansible_os_family == 'RedHat'
+
 #when installed
 - block:
+
+  #Next, back up the snmp.conf file by entering the following:
+  #mv /etc/snmp/snmpd.conf /etc/snmp/snmpd.conf~
+  - name: FILE - backup /etc/snmp/snmpd.conf
+    become: true
+    ansible.builtin.copy:
+      src: '/etc/snmp/snmpd.conf'
+      dest: '/etc/snmp/snmpd.conf~'
+      remote_src: true
+      owner: root
+      group: root
+      mode: '0644'
+      backup: yes
+
+  #Edit your snmpd file:
+  #nano /etc/default/snmpd
+  #Find and comment out the following:
+  #SNMPSDOPTS=‘ -Lsd -Lf /dev/null -u snmp -p /var/run/snmpd.pid’
+  #Now add the following line:
+  #SNMPDOPTS=‘ -Lsd -Lf /dev/null -u snmp -I -smux -p /var/run/snmpd/pid -c /etc/snmp/snmpd/conf’
+  - name: SNMPD - Configure /etc/default/snmpd 1/3
+    become: true
+    replace: 
+      path: '/etc/default/snmpd'
+      regexp: "#SNMPDOPTS="
+      replace: "SNMPDOPTS="
+
+  - name: SNMPD - Configure /etc/default/snmpd 2/3
+    become: true
+    replace: 
+      path: '/etc/default/snmpd'
+      regexp: "snmpd/pid'$"
+      replace: "snmp/pid -c /etc/snmp/snmpd/conf'"
+
+  - name: SNMPD - Configure /etc/default/snmpd 3/3
+    become: true
+    replace: 
+      path: '/etc/default/snmpd'
+      regexp: "snmpd.pid'$"
+      replace: "snmpd.pid -c /etc/snmp/snmpd/conf'"
+
   #sudo systemctl enable --now snmpd
+  #sysv-rc-conf snmpd on
   - name: SERVICE - Ensure snmpd service enabled
     become: true
     service:
@@ -39,5 +106,16 @@
       name: snmpd
       state: started
     when: snmpd_enabled
+
+  #Restart snmpd by entering the following:
+  #sudo systemctl restart snmpd
+  #sudo /etc/init.d/snmpd restart
+  - name: SERVICE - Ensure snmpd service restarted
+    become: true
+    service:
+      name: snmpd
+      state: restarted
+    when: snmpd_enabled
+
   when: snmpd_installed is defined
 

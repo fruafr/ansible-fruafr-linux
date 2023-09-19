@@ -1,0 +1,80 @@
+---
+# tasks file for snmp_config
+- name: Replace sysLocation
+  become: true
+  replace: 
+    path: "{{ snmpd_config_file }}"
+    regexp: '(^sysLocation\s)(.*)$'
+    replace: "\\1 {{ sysLocation }}"
+    backup: yes
+  when: sysLocation is defined
+
+- name: Replace sysContact
+  become: true
+  replace: 
+    path: "{{ snmpd_config_file }}"
+    regexp: '(^sysContact\s)(.*)$'
+    replace: "\\1 {{ sysContact }}"
+  when: sysContact is defined
+
+- block:
+  - name: Replace agentaddress
+    become: true
+    replace: 
+      path: "{{ snmpd_config_file }}"
+      regexp: '(^agentaddress\s)(.*)$'
+      replace: "\\1 {{ agentaddress | regex_escape() }}"
+    register: agentaddress_set 
+    when: agentaddress is defined
+
+  - name: Replace agentaddress by default
+    become: true
+    replace:
+      path: "{{ snmpd_config_file }}"
+      regexp: '(^agentaddress\s)(.*)$'
+      replace: "\\1 {{ snmpd_default_agentaddress }}"
+    when: not (agentaddress is defined)
+
+  #Add community to the new config file:
+  #echo “rocommunity [rocommunitystring]”>/etc/snmp/snmpd.conf
+  - name: SNMPD - Add read only community 
+    become: true
+    ansible.builtin.lineinfile:
+      path: '/etc/snmp/snmpd.conf'
+      state: present
+      line: "rocommunity {{ rocommunitystring }}"
+    when: rocommunitystring is defined
+
+  - name: SNMPD - Add read only community IPv6
+    become: true
+    ansible.builtin.lineinfile:
+      path: '/etc/snmp/snmpd.conf'
+      state: present
+      line: "rocommunity6 {{ rocommunitystring }}"
+    when: rocommunitystring is defined
+
+  #Add community to the new config file:
+  #echo “rwcommunity [rwcommunitystring]”>/etc/snmp/snmpd.conf
+  - name: SNMPD - Add read write community 
+    become: true
+    ansible.builtin.lineinfile:
+      path: '/etc/snmp/snmpd.conf'
+      state: present
+      line: "rwcommunity {{ rwcommunitystring }}"
+    when: rwcommunitystring is defined
+
+  - name: SNMPD - Add read write community IPv6
+    become: true
+    ansible.builtin.lineinfile:
+      path: '/etc/snmp/snmpd.conf'
+      state: present
+      line: "rwcommunity6 {{ rwcommunitystring }}"
+    when: rwcommunitystring is defined
+
+- name: SERVICE - Ensure snmpd service reloaded
+  become: true
+  service:
+    name: snmpd
+    state: reloaded
+
+

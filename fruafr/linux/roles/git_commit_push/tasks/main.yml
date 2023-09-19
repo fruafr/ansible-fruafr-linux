@@ -1,0 +1,39 @@
+---
+# tasks file for git_commit_push
+
+#Add files to the commit
+- name: "git add for directory {{ git_directory }}"
+  shell: git add .
+  args:
+    chdir: git_directory
+
+#Get the git status
+- name: "git status"
+  shell: git status
+  args:
+    chdir: git_directory
+  register: git_add_status
+
+#Commit
+- name: "git commit -a -m \"{{ git_message }}\""
+  shell: "git commit -a -m \"{{ git_message }}\""
+  args:
+    chdir: git_directory
+  ignore_errors: true
+
+#Push
+- name: git push
+  shell: git push --force
+  args:
+    chdir: git_directory
+  register: pushed
+  when: git_force is true
+
+#Push without force if not pushed already
+- name: git push
+  shell: git push
+  args:
+    chdir: git_directory
+  when: pushed is undefined
+
+

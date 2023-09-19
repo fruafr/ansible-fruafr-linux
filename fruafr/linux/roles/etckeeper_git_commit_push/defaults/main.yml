@@ -1,0 +1,5 @@
+---
+# defaults file for etckeeper_git_commit_push
+git_directory: '/etc'
+git_message: 'etckeeper commit via Ansible'
+git_force: true

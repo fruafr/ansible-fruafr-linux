@@ -1,5 +1,5 @@
 ---
-# default file for etckeeper_external_repo_setup
+# defaults file for etckeeper_external_repo_setup
 git_url: "git.example.com"
 ssl_verify : "false"
 remote_branch: "main"

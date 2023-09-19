@@ -1,0 +1,5 @@
+---
+# tasks file for etckeeper_git_commit_push
+
+- name: "etckeeper git commit and push"
+  include_role: fruafr.linux.git_commit_push

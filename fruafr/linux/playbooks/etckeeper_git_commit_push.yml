@@ -1,0 +1,9 @@
+---
+#Perform an etckeeper git commit and push
+- hosts: all
+  become: true
+  collections:
+    - fruafr.linux
+  roles:
+    - etckeeper_git_commit_push
+

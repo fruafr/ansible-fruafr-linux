@@ -1,0 +1,8 @@
+---
+#Perform a git commit push
+- hosts: all
+  become: true
+  collections:
+    - fruafr.linux
+  roles:
+    - git_commit_push

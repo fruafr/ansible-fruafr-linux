@@ -3,64 +3,66 @@
 
 #Setup etckeeper to use an external repository
 - name: Set git username if not specified
-  vars_prompt: 
-    - name: "git_username" 
-      prompt: "Enter the git username" 
-      private: no 
-  when: git_username is not specified
+  pause:
+    prompt: "Enter the git username" 
+  register: git_username
+  when: git_username is not defined
 
 - name: Set git email if not specified
-  vars_prompt: 
-    - name: "git_email"
-      prompt: "Enter the git email"
-      private: no
-  when: git_email is not specified
+  pause:
+    prompt: "Enter the git email" 
+  register: git_email
+  when: git_email is not defined
 
 - name: Set git password if not specified
-  vars_prompt: 
-    - name: "git_password" 
-      prompt: "Enter the git password" 
-      private: yes  
-  when: git_password is not specified
+  pause:
+    prompt: "Enter the git password" 
+    echo: no
+  register: git_password
+  when: git_password is not defined
 
 - name: Create default remote username if not specified
-  vars:
+  set_fact:
     git_remote_user: "{{ ansible_hostname }}"
   when: git_remote_user is not defined
 
 - name: Create default remote repo if not specified
-  vars:
+  set_fact:
     git_remote_repo: "{{ ansible_hostname }}-etc.git"
   when: git_remote_repo is not defined
 
 - name: Template the etckeeeper /etc/.git/config file
+  become: true
   ansible.builtin.template:
     src: ../templates/config.j2
     dest: /etc/.git/config
-    owner: root
-    group: root
+    owner: 'root'
+    group: 'root'
     mode: '0644'
 
 - name: Template the etckeeper /etc/.git/description file
+  become: true
   ansible.builtin.template:
     src: ../templates/description.j2
     dest: /etc/.git/description
-    owner: root
-    group: root
+    owner: 'root'
+    group: 'root'
     mode: '0644'
 
 - name: Template the etckeeper /root/.gitconfig file
+  become: true
   ansible.builtin.template:
     src: ../templates/.gitconfig.j2
     dest: "/root/.gitconfig"
-    owner: "root"
-    group: "root"
+    owner: 'root'
+    group: 'root'
     mode: '0644'
   
 - name: Template the etckeeper /root/.git-credentials file
+  become: true
   ansible.builtin.template:
     src: ../templates/.git-credentials.j2
     dest: "/root/.git-credentials"
-    owner: "root"
-    group: "root"
+    owner: 'root'
+    group: 'root'
     mode: '0600'

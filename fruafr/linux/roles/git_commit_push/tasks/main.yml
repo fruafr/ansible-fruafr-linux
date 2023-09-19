@@ -5,35 +5,37 @@
 - name: "git add for directory {{ git_directory }}"
   shell: git add .
   args:
-    chdir: git_directory
+    chdir: "{{ git_directory }}"
 
 #Get the git status
 - name: "git status"
   shell: git status
   args:
-    chdir: git_directory
+    chdir: "{{ git_directory }}"
   register: git_add_status
 
 #Commit
 - name: "git commit -a -m \"{{ git_message }}\""
   shell: "git commit -a -m \"{{ git_message }}\""
   args:
-    chdir: git_directory
+    chdir: "{{ git_directory }}"
   ignore_errors: true
+  register: git_commit
+  when: not git_add_status.stdout is search('nothing to commit')
 
 #Push
-- name: git push
+- name: git push --force
   shell: git push --force
   args:
-    chdir: git_directory
+    chdir: "{{ git_directory }}"
   register: pushed
-  when: git_force is true
+  when: (not git_commit is skipped) and git_force
 
 #Push without force if not pushed already
 - name: git push
   shell: git push
   args:
-    chdir: git_directory
-  when: pushed is undefined
+    chdir: "{{ git_directory }}"
+  when: (not git_commit is skipped) and (pushed is undefined)
 
 

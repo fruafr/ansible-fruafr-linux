@@ -1,0 +1,33 @@
+---
+# tasks file for packages_snmpd
+#Source : https://wiki.esia-sa.com/tierce/snmp_proxmox
+
+# Debian
+- block:
+  #sudo apt-get update
+  - name: APT - Update
+    become: true
+    ansible.builtin.apt:
+      update_cache: yes
+      cache_valid_time: 86400 #One day
+
+  #sudo apt-get -y install snmpd
+  - name: APT - install snmpd
+    apt:
+      pkg: snmpd
+      state: present
+
+  when: ansible_os_family == 'Debian'
+
+#sudo systemctl enable --now snmpd
+- name: SERVICE - Ensure snmpd service enabled
+  service:
+    name: snmpd
+    enabled: yes
+
+#sudo systemctl start snmpd
+#sudo /etc/init.d/snmpd start
+- name: SERVICE - Ensure snmpd service started
+  service:
+    name: snmpd
+    state: started

@@ -2,4 +2,11 @@
 # tasks file for etckeeper_git_commit_push
 
 - name: "etckeeper git commit and push"
-  include_role: fruafr.linux.git_commit_push
+  import_role: 
+    name: git_commit_push
+  vars:
+    git_directory: "{{ etckeeeper_git_directory }}"
+    git_message: "{{ etckeeeper_git_message }}"
+    git_force: "{{ etckeeeper_git_force }}"
+  
+

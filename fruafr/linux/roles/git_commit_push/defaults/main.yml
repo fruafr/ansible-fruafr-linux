@@ -1,5 +1,5 @@
 ---
 # defaults file for git_commit_push
-git_directory: '$HOME/'
+git_directory: "$HOME/"
 git_message: 'Default comment'
 git_force: true

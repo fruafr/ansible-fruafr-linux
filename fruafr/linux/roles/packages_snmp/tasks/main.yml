@@ -1,5 +1,5 @@
 ---
-# tasks file for packages_snmpd
+# tasks file for packages_snmp
 #Source : 
 # - https://wiki.esia-sa.com/tierce/snmp_proxmox
 # - https://www.comparitech.com/net-admin/snmp-community-strings-windows-linux/
@@ -15,11 +15,13 @@
       cache_valid_time: 86400 #One day
   
   #Install the snmpd package by entering the following:
-  #sudo apt-get -y install snmpd
+  #sudo apt-get -y install snmpd snmp
   - name: APT - install snmpd
     become: true
     apt:
-      pkg: snmpd
+      pkg: 
+        - snmpd
+        - snmp
       state: present
     register: snmpd_installed
 

@@ -1,9 +1,9 @@
 ---
-# Install snmpd
+# Install snmp
 # Author: David HEURTEVENT
 # Date : 2023-09-19
 - hosts: all
   collections:
     - fruafr.linux
   roles:
-    - packages_snmpd
+    - packages_snmp

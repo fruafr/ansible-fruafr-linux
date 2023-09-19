@@ -16,18 +16,23 @@
     ansible.builtin.apt:
       pkg: fail2ban
       state: present
+    register: fail2ban_installed
   when: ansible_os_family == 'Debian'
 
-#sudo systemctl enable --now fail2ban
-- name: SERVICE - Ensure fail2ban service enabled
-  become: true
-  ansible.builtin.service:
-    name: fail2ban
-    enabled: yes
+- block:
+  #sudo systemctl enable --now fail2ban
+  - name: SERVICE - Ensure fail2ban service enabled
+    become: true
+    ansible.builtin.service:
+      name: fail2ban
+      enabled: yes
+    register: fail2ban_enabled
 
-#sudo service fail2ban start
-- name: SERVICE - Ensure fail2ban service started
-  become: true
-  ansible.builtin.service:
-    name: fail2ban
-    state: started
+  #sudo service fail2ban start
+  - name: SERVICE - Ensure fail2ban service started
+    become: true
+    ansible.builtin.service:
+      name: fail2ban
+      state: started
+    when: fail2ban_enabled
+  when: fail2ban_installed 

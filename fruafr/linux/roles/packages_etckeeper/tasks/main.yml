@@ -15,36 +15,44 @@
     apt:
       pkg: etckeeper
       state: present
+    register: etckeeper_installed
   when: ansible_os_family == 'Debian'
 
-#systemctl enable --now etckeeper
-- name: SERVICE - Ensure etckeeper service enabled
-  service:
-    name: etckeeper
-    enabled: yes
+- block:
+  #systemctl enable --now etckeeper
+  - name: SERVICE - Ensure etckeeper service enabled
+    service:
+      name: etckeeper
+      enabled: yes
+    register: etckeeper_enabled
 
-#systemctl start etckeeper
-- name: SERVICE - Ensure etckeeper service started
-  service:
-    name: etckeeper
-    state: started
+  - block:
+      #systemctl start etckeeper
+    - name: SERVICE - Ensure etckeeper service started
+      service:
+        name: etckeeper
+        state: started
 
-#ls /etc/.git
-- name: Test if /etc/.git is present
-  stat:
-    path: /etc/.git
-  register: etc_git
+    #ls /etc/.git
+    - name: Test if /etc/.git is present
+      stat:
+        path: /etc/.git
+      register: etc_git
 
-#mkdir /etc/.git
-- name: ETCKEEPER - Initialize if /etc/.git not present
-  command:
-    cmd: etckeeper init
-    creates: /etc/.git
-  when: etc_git.stat.exists == false
-  register: etc_initialized
+    #mkdir /etc/.git
+    - name: ETCKEEPER - Initialize if /etc/.git not present
+      command:
+        cmd: etckeeper init
+        creates: /etc/.git
+      when: etc_git.stat.exists == false
+      register: etc_initialized
 
-#etckeeper commit "Initial commit"
-- name: ETCKEEPER - Initial commit if initialized
-  command:
-    cmd: etckeeper commit "Initial commit"
-  when: etc_initialized is not skipped
+    #etckeeper commit "Initial commit"
+    - name: ETCKEEPER - Initial commit if initialized
+      command:
+        cmd: etckeeper commit "Initial commit"
+      when: etc_initialized is not skipped
+
+    when: etckeeper_enabled
+
+  when: etckeeper_installed is defined

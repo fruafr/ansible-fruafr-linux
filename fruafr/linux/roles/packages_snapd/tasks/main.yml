@@ -24,11 +24,13 @@
         state: latest
         update_cache: yes
         cache_valid_time: 86400 #One day
+      register: snapd_installed
 
     #sudo snap install core
     - name: 'install snap core'
       community.general.snap:
         name: core
+      when: snapd_installed
 
     when: package.rc == 1
   

@@ -17,17 +17,22 @@
         - iptables
         - ufw
       state: present
+    register: ufw_installed
   when: ansible_os_family == 'Debian'
 
+#when installed
+- block:
+  #sudo systemctl enable --now ufw
+  - name: SERVICE - Ensure ufw service enabled
+    service:
+      name: ufw
+      enabled: yes
+    register: ufw_enabled
 
-#sudo systemctl enable --now ufw
-- name: SERVICE - Ensure ufw service enabled
-  service:
-    name: ufw
-    enabled: yes
-
-#sudo systemctl start ufw
-- name: SERVICE - Ensure ufw service started
-  service:
-    name: ufw
-    state: started
+  #sudo systemctl start ufw
+  - name: SERVICE - Ensure ufw service started
+    service:
+      name: ufw
+      state: started
+    when: ufw_enabled
+  when: uwf_installed is defined

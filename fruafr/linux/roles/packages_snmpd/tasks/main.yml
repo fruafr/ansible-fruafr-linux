@@ -13,21 +13,31 @@
 
   #sudo apt-get -y install snmpd
   - name: APT - install snmpd
+    become: true
     apt:
       pkg: snmpd
       state: present
+    register: snmpd_installed
 
   when: ansible_os_family == 'Debian'
 
-#sudo systemctl enable --now snmpd
-- name: SERVICE - Ensure snmpd service enabled
-  service:
-    name: snmpd
-    enabled: yes
+#when installed
+- block:
+  #sudo systemctl enable --now snmpd
+  - name: SERVICE - Ensure snmpd service enabled
+    become: true
+    service:
+      name: snmpd
+      enabled: yes
+    register: snmpd_enabled
 
-#sudo systemctl start snmpd
-#sudo /etc/init.d/snmpd start
-- name: SERVICE - Ensure snmpd service started
-  service:
-    name: snmpd
-    state: started
+  #sudo systemctl start snmpd
+  #sudo /etc/init.d/snmpd start
+  - name: SERVICE - Ensure snmpd service started
+    become: true
+    service:
+      name: snmpd
+      state: started
+    when: snmpd_enabled
+  when: snmpd_installed is defined
+

@@ -11,14 +11,22 @@
 - name: Set git email if not specified
   pause:
     prompt: "Enter the git email" 
-  register: git_email
+  register: git_email_prompt
+  when: git_email is not defined
+
+- set_fact: 
+    git_email: "{{ git_email_prompt.user_input }}"
   when: git_email is not defined
 
 - name: Set git password if not specified
   pause:
     prompt: "Enter the git password" 
     echo: no
-  register: git_password
+  register: git_password_prompt
+  when: git_password is not defined
+
+- set_fact: 
+    git_password: "{{ git_password_prompt.user_input }}"
   when: git_password is not defined
 
 - name: Create default remote username if not specified

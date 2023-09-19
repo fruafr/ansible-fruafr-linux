@@ -1,0 +1,116 @@
+---
+# tasks file for snmp_create_user
+
+# Stop SNMPD
+- name: SERVICE - snmpd service stopped
+  become: true
+  service:
+    name: snmpd
+    state: stopped
+
+- name: Set username if not specified
+  pause:
+    prompt: "Enter the username to create" 
+  register: snmp_username_prompt
+  when: snmp_username is not defined
+
+- set_fact: 
+    snmp_username: "{{ snmp_username_prompt.user_input }}"
+  when: snmp_username is not defined
+
+- name: Set authentication algorithm if not specified
+  pause:
+    prompt: "Enter the authentication algorithm [MD5|SHA|SHA-512|SHA-384|SHA-256|SHA-224]" 
+  register: snmp_auth_alg_prompt
+  when: snmp_auth_alg is not defined
+
+- set_fact: 
+    snmp_auth_alg: "{{ snmp_auth_alg_prompt.user_input }}"
+  when: snmp_auth_alg is not defined
+
+- name: Set authentication passphrase if not specified
+  pause:
+    prompt: "Enter the authentication passphrase" 
+    echo: no
+  register: snmp_auth_passphrase_prompt
+  when: snmp_auth_passphrase is not defined
+
+- set_fact: 
+    snmp_auth_passphrase: "{{ snmp_auth_passphrase_prompt.user_input }}"
+  when: snmp_auth_passphrase is not defined
+
+- name: 'Is a priv passphrase needed ?'
+  pause:
+    prompt: "Is a priv passphrase needed ? [true | false]" 
+  register: snmp_priv_bool_prompt
+  when: snmp_priv_passphrase is not defined
+
+- set_fact: 
+    snmp_priv_bool: "{{ snmp_priv_bool_prompt.user_input | bool }}"
+  when: snmp_priv_passphrase is not defined
+
+- block:
+  - name: Set private key algorithm if not specified
+    pause:
+      prompt: "Enter the private key algorithm [DES|AES]" 
+    register: snmp_priv_alg_prompt
+    when: snmp_priv_alg is not defined
+
+  - set_fact: 
+      snmp_priv_alg: "{{ snmp_priv_alg_prompt.user_input }}"
+    when: snmp_priv_alg is not defined
+
+  - name: Set private key passphrase if not specified
+    pause:
+      prompt: "Enter the private key passphrase" 
+      echo: no
+    register: snmp_priv_passphrase_prompt
+    when: snmp_priv_passphrase is not defined
+
+  - set_fact: 
+      snmp_priv_passphrase: "{{ snmp_priv_passphrase_prompt.user_input }}"
+    when: snmp_priv_passphrase is not defined
+
+  when: snmp_priv_bool
+
+#Debian/Ubuntu
+- block:
+
+  # adding the following line to /var/lib/snmp/snmpd.conf:
+  # e.g. createUser username MD5 "test1test" AES "test1test1"
+  # createUser username (MD5|SHA|SHA-512|SHA-384|SHA-256|SHA-224) authpassphrase [DES|AES] [privpassphrase]
+  - name: "Add createUser to {{ snmp_var_lib_file }}"
+    become: true
+    ansible.builtin.lineinfile:
+      path: "{{ snmp_var_lib_file }}"
+      state: present
+      line: "createUser {{ snmp_username }} {{ snmp_auth_alg }} \"{{ snmp_auth_passphrase }}\" {{ snmp_priv_alg }} \"{{ snmp_priv_passphrase }}\""
+    when: (snmp_var_lib_file is defined) and (snmp_username is defined) and (snmp_auth_alg is defined) and (snmp_priv_alg is defined)
+
+  - name: "Add createUser to {{ snmp_var_lib_file }} - alt1"
+    become: true
+    ansible.builtin.lineinfile:
+      path: "{{ snmp_var_lib_file }}"
+      state: present
+      line: "createUser {{ snmp_username }} {{ snmp_auth_alg }} \"{{ snmp_auth_passphrase }}\""
+    when: (snmp_var_lib_file is defined) and (snmp_username is defined) and not (snmp_auth_alg is defined) and not (snmp_priv_alg is defined)
+
+  # adding the following line to /usr/share/snmp/snmpd.conf:
+  # rwuser username or rouser username
+  - name: "Add the user to {{ snmp_share_config_file }}"
+    become: true
+    ansible.builtin.lineinfile:
+      path: "{{ snmp_share_config_file }}"
+      state: present
+      line: "{{ snmp_usermode }}user {{ snmp_username }}"
+    when: (snmp_share_config_file is defined) and (snmp_usermode is defined) and (snmp_username is defined)
+  
+  when: ansible_os_family == 'Debian'
+
+- name: SERVICE - Ensure snmpd service started
+  become: true
+  service:
+    name: snmpd
+    state: started
+
+

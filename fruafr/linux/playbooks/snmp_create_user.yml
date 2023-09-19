@@ -1,0 +1,10 @@
+---
+# Configure snmp - create a new user
+# Author: David HEURTEVENT
+# Date : 2023-09-19
+- hosts: all
+  become: true
+  collections:
+    - fruafr.linux
+  roles:
+    - snmp_create_user

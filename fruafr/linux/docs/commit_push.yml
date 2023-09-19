@@ -1,0 +1,27 @@
+---
+#Setup etckeeper to use an external repository
+- hosts: all
+  become: true
+  tasks:
+  
+  - name: git add
+    shell: git add .
+    args:
+      chdir: "/etc"
+
+  - name: git status
+    shell: git status
+    args:
+      chdir: "/etc"
+    register: git_add_status
+
+  - name: git commit
+    shell: git commit -a -m "'Post install commit via Ansible'"
+    args:
+      chdir: "/etc"
+    ignore_errors: true
+
+  - name: git push
+    shell: git push --force
+    args:
+      chdir: "/etc"

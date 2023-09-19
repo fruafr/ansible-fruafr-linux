@@ -1,0 +1,13 @@
+[core]
+        repositoryformatversion = 0
+        filemode = true
+        bare = false
+        logallrefupdates = true
+[http]
+        sslVerify = {{ ssl_verify }}
+[remote "{{ remote_branch }}"]
+        url = https://{{ git_url }}/{{ git_remote_user }}/{{ git_remote_repo }}
+        fetch = +refs/heads/*:refs/remotes/{{ remote_branch }}/*
+[branch "{{ local_branch }}"]
+        remote = {{ remote_branch }}
+        merge = refs/heads/{{ local_branch }}

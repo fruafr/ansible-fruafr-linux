@@ -1,0 +1,66 @@
+---
+# tasks file for etckeeper_external_repo_setup
+
+#Setup etckeeper to use an external repository
+- name: Set git username if not specified
+  vars_prompt: 
+    - name: "git_username" 
+      prompt: "Enter the git username" 
+      private: no 
+  when: git_username is not specified
+
+- name: Set git email if not specified
+  vars_prompt: 
+    - name: "git_email"
+      prompt: "Enter the git email"
+      private: no
+  when: git_email is not specified
+
+- name: Set git password if not specified
+  vars_prompt: 
+    - name: "git_password" 
+      prompt: "Enter the git password" 
+      private: yes  
+  when: git_password is not specified
+
+- name: Create default remote username if not specified
+  vars:
+    git_remote_user: "{{ ansible_hostname }}"
+  when: git_remote_user is not defined
+
+- name: Create default remote repo if not specified
+  vars:
+    git_remote_repo: "{{ ansible_hostname }}-etc.git"
+  when: git_remote_repo is not defined
+
+- name: Template the etckeeeper /etc/.git/config file
+  ansible.builtin.template:
+    src: ../templates/config.j2
+    dest: /etc/.git/config
+    owner: root
+    group: root
+    mode: '0644'
+
+- name: Template the etckeeper /etc/.git/description file
+  ansible.builtin.template:
+    src: ../templates/description.j2
+    dest: /etc/.git/description
+    owner: root
+    group: root
+    mode: '0644'
+
+- name: Template the etckeeper /root/.gitconfig file
+  ansible.builtin.template:
+    src: ../templates/.gitconfig.j2
+    dest: "/root/.gitconfig"
+    owner: "root"
+    group: "root"
+    mode: '0644'
+  
+- name: Template the etckeeper /root/.git-credentials file
+  ansible.builtin.template:
+    src: ../templates/.git-credentials.j2
+    dest: "/root/.git-credentials"
+    owner: "root"
+    group: "root"
+    mode: '0600'

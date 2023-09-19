@@ -1,0 +1,10 @@
+---
+#Setup external repo for etckeeper
+- hosts: all
+  become: true
+  collections:
+    - fruafr.linux
+  roles:
+    - etckeeper_external_repo_setup
+
+

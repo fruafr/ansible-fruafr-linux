@@ -1,5 +1,15 @@
 ---
 # tasks file for user_absent
+
+- block:
+  - name: Set username if not specified
+    pause:
+      prompt: "Enter the username to be absent" 
+    register: username_prompt
+  - set_fact: 
+      username: "{{ username_prompt.user_input }}"
+  when: username is not defined
+
 - name: "User {{ username }} absent (removed if needed)"
   become: true
   ansible.builtin.user:

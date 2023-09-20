@@ -2,7 +2,6 @@
 # tasks file for user_password_set
 # Set the user password
 
-
 - block:
   - name: Set username if not specified
     pause:
@@ -19,7 +18,8 @@
       echo: no
     register: password_prompt  
   - set_fact: 
-      password: "{{ password_prompt.user_input }}"  
+      password: "{{ password_prompt.user_input }}"
+  when: password is not defined  
 
 #passwd user
 - name: "Set the password for user {{ username }}"

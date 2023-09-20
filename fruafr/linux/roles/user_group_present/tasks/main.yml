@@ -1,6 +1,24 @@
 ---
 # tasks file for user_group_present
 
+- block:
+  - name: Set username if not specified
+    pause:
+      prompt: "Enter the username" 
+    register: username_prompt
+  - set_fact: 
+      username: "{{ username_prompt.user_input }}"
+  when: username is not defined
+
+- block:
+  - name: Set password if not specified
+    pause:
+      prompt: "Enter the groupname to add the user to"
+    register: groupname_prompt  
+  - set_fact: 
+      password: "{{ groupname_prompt.user_input }}"  
+  when: groupname is not defined
+
 #User must be present in group
 - name: "User {{ username }} present (removed if needed)"
   become: true

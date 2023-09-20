@@ -1,6 +1,7 @@
 ---
-#Generate a ssh key for a user
-#https://docs.ansible.com/ansible/latest/collections/ansible/builtin/user_module.html
+# (c) Copyright: David HEURTEVENT, 2023
+# License: GPL 3.0
+# Generate a ssh key for a user
 - hosts: all
   become: true
   collections:

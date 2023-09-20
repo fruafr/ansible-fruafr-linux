@@ -1,5 +1,11 @@
 ---
+# (c) Copyright: David HEURTEVENT, 2023
+# License: GPL 3.0
+
 # tasks file for system_poweroff
+
+# Poweroff the system
+
 - name: poweroff
   become: true
   ansible.builtin.command: "poweroff"

@@ -1,4 +1,6 @@
 ---
+# (c) Copyright: David HEURTEVENT, 2023
+# License: GPL 3.0
 # defaults file for etckeeper_git_commit_push
 etckeeeper_git_directory: '/etc'
 etckeeeper_git_message: 'etckeeper commit via Ansible'

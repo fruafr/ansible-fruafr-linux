@@ -1,7 +1,7 @@
 ---
+# (c) Copyright: David HEURTEVENT, 2023
+# License: GPL 3.0
 # Reset the localhost records in /etc/hosts
-# Author: David HEURTEVENT
-# Date : 2023-07-09
 - hosts: all
   become: true
   collections:

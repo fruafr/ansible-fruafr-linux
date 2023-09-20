@@ -1,6 +1,10 @@
 ---
+# (c) Copyright: David HEURTEVENT, 2023
+# License: GPL 3.0
+
 # tasks file for user_present
-# useradd user
+
+# User must be present/added
 
 - block:
   - name: Set username if not specified
@@ -11,6 +15,7 @@
       username: "{{ username_prompt.user_input }}"
   when: username is not defined
 
+# useradd user
 - name: "Create the user {{ username }} if it does not exist"
   become: true
   ansible.builtin.user:

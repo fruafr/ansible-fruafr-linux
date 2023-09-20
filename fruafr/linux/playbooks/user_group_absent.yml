@@ -1,3 +1,6 @@
+---
+# (c) Copyright: David HEURTEVENT, 2023
+# License: GPL 3.0
 # User absent in group
 - hosts: all
   become: true

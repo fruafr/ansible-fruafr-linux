@@ -1,5 +1,9 @@
 ---
+# (c) Copyright: David HEURTEVENT, 2023
+# License: GPL 3.0
+
 # tasks file for user_ssh_key_gen
+
 # Generate a ssh key for the user
 
 - block:

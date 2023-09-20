@@ -1,4 +1,6 @@
 ---
+# (c) Copyright: David HEURTEVENT, 2023
+# License: GPL 3.0
 - hosts: localhost
   remote_user: root
   roles:

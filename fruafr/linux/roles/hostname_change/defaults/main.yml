@@ -1,3 +1,5 @@
 ---
+# (c) Copyright: David HEURTEVENT, 2023
+# License: GPL 3.0
 # defaults file for hostname_change
 hostname_template: "../templates/hostname.j2"

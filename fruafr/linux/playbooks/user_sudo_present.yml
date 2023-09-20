@@ -1,3 +1,5 @@
+# (c) Copyright: David HEURTEVENT, 2023
+# License: GPL 3.0
 # User present in sudo group (added if necessary)
 - hosts: all
   become: true

@@ -1,6 +1,12 @@
 ---
+# (c) Copyright: David HEURTEVENT, 2023
+# License: GPL 3.0
+
 # tasks file for packages_snmp
-#Source : 
+
+# Install SNMP
+
+# Documentation : 
 # - https://wiki.esia-sa.com/tierce/snmp_proxmox
 # - https://www.comparitech.com/net-admin/snmp-community-strings-windows-linux/
 

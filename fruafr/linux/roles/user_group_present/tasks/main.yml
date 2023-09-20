@@ -1,5 +1,10 @@
 ---
+# (c) Copyright: David HEURTEVENT, 2023
+# License: GPL 3.0
+
 # tasks file for user_group_present
+
+# User must be present/added to group
 
 - block:
   - name: Set username if not specified

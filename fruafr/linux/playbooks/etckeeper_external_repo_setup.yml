@@ -1,5 +1,7 @@
 ---
-#Setup external repo for etckeeper
+# (c) Copyright: David HEURTEVENT, 2023
+# License: GPL 3.0
+# Setup external repo for etckeeper
 - hosts: all
   become: true
   collections:

@@ -1,4 +1,7 @@
 ---
+# (c) Copyright: David HEURTEVENT, 2023
+# License: GPL 3.0
+
 # defaults file for snmp_create_user
 snmp_share_config_file: '/usr/share/snmp/snmpd.conf'
 snmp_usermode: 'ro'

@@ -1,5 +1,11 @@
 ---
+# (c) Copyright: David HEURTEVENT, 2023
+# License: GPL 3.0
+
 # tasks file for system_shutdown
+
+# Shutdown the system
+
 - name: Shutdown
   become: true
   ansible.builtin.command: "shutdown"

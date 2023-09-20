@@ -1,5 +1,7 @@
 ---
-#User present - Create the user if it does not exist
+# (c) Copyright: David HEURTEVENT, 2023
+# License: GPL 3.0
+# User present - Create the user if it does not exist
 - hosts: all
   become: true
   collections:

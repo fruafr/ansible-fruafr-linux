@@ -1,5 +1,7 @@
 ---
-#Perform an etckeeper git commit and push
+# (c) Copyright: David HEURTEVENT, 2023
+# License: GPL 3.0
+# Perform an etckeeper git commit and push
 - hosts: all
   become: true
   collections:

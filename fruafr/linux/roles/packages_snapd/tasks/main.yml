@@ -1,4 +1,6 @@
 ---
+# (c) Copyright: David HEURTEVENT, 2023
+# License: GPL 3.0
 # tasks file for packages_snapd
 # Install snapd
 #https://snapcraft.io/docs/installing-snap-on-debian

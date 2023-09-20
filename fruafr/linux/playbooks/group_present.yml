@@ -1,5 +1,7 @@
 ---
-#Group is present (Create the group if necessary)
+# (c) Copyright: David HEURTEVENT, 2023
+# License: GPL 3.0
+# Group is present (Create the group if necessary)
 - hosts: all
   become: true
   collections:

@@ -1,7 +1,7 @@
 ---
+# (c) Copyright: David HEURTEVENT, 2023
+# License: GPL 3.0
 # Install file compression packages
-# Author: David HEURTEVENT
-# Date : 2023-09-17
 - hosts: all
   become: true
   collections:

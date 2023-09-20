@@ -58,16 +58,19 @@
 
   when: ansible_distribution == "Ubuntu"
 
-#sudo systemctl enable --now cockpit
-- name: SERVICE - Ensure cockpit service enabled
-  service:
-    name: cockpit
-    enabled: yes
-  when: cockpit_installed is succeeded
-
-#sudo systemctl start cockpit
-- name: SERVICE - Ensure cockpit service started
-  service:
-    name: cockpit
-    state: started
+- block:
+  #sudo systemctl enable --now cockpit
+  - name: SERVICE - Ensure cockpit service enabled
+    service:
+      name: cockpit
+      enabled: yes
+  #pause
+  - name: pause 5 seconds
+    pause:
+      seconds: 5
+  #sudo systemctl start cockpit
+  - name: SERVICE - Ensure cockpit service started
+    service:
+      name: cockpit
+      state: started
   when: cockpit_installed is succeeded

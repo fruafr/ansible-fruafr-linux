@@ -1,6 +1,16 @@
 ---
 # tasks file for user_present
 # useradd user
+
+- block:
+  - name: Set username if not specified
+    pause:
+      prompt: "Enter the username" 
+    register: username_prompt
+  - set_fact: 
+      username: "{{ username_prompt.user_input }}"
+  when: username is not defined
+
 - name: "Create the user {{ username }} if it does not exist"
   become: true
   ansible.builtin.user:

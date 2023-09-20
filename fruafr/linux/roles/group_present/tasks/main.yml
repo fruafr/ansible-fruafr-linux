@@ -1,5 +1,15 @@
 ---
 # tasks file for group_present
+
+- block:
+  - name: Set groupname if not specified
+    pause:
+      prompt: "Enter the groupname to be present"
+    register: groupname_prompt  
+  - set_fact: 
+      groupname: "{{ groupname_prompt.user_input }}"  
+  when: groupname is not defined
+
 - name: "group {{ groupname }} present (created if needed)"
   become: true
   ansible.builtin.group:

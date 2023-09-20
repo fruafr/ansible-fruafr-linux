@@ -2,6 +2,24 @@
 # tasks file for hostname_change
 
 - block:
+  - name: Set hostname if not specified
+    pause:
+      prompt: "Enter the new hostname"
+    register: hostname_prompt
+  - set_fact: 
+      hostname : "{{ hostname_prompt.user_input }}"
+  when: hostname is not defined
+
+- block:
+  - name: Set the FQDN if not specified
+    pause:
+      prompt: "Enter the new fully-qualified domain name"
+    register: fqdn_prompt
+  - set_fact: 
+      fqdn : "{{ fqdn_prompt.user_input }}"
+  when: fqdn is not defined
+
+- block:
   - name: Set the hostname
     become: true
     ansible.builtin.hostname:

@@ -1,0 +1,29 @@
+---
+# (c) Copyright: David HEURTEVENT, 2023
+# License: GPL 3.0
+
+# tasks file for service_cycle
+
+# Service is stopped and started (after a pause of 5 seconds)
+- block:
+  - name: Set service name if not specified
+    pause:
+      prompt: "Enter the service name" 
+    register: service_prompt
+  - set_fact: 
+      service: "{{ service_prompt.user_input }}"
+  when: service is not defined
+
+- name: "SERVICE - Ensure {{ service }} is stopped"
+  service:
+    name: "{{ service }}"
+    state: stopped
+
+- name: Pause for 5 seconds
+  pause:
+    seconds: 5
+
+- name: "SERVICE - Ensure {{ service }} is started"
+  service:
+    name: "{{ service }}"
+    state: started

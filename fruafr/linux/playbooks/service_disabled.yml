@@ -1,0 +1,10 @@
+---
+# (c) Copyright: David HEURTEVENT, 2023
+# License: GPL 3.0
+# Service disabled at boot
+- hosts: all
+  become: true
+  collections:
+    - fruafr.linux
+  roles:
+    - service_disabled

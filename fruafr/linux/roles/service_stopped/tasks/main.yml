@@ -1,0 +1,20 @@
+---
+# (c) Copyright: David HEURTEVENT, 2023
+# License: GPL 3.0
+
+# tasks file for service_stopped
+
+# Service stopped
+- block:
+  - name: Set service name if not specified
+    pause:
+      prompt: "Enter the service name" 
+    register: service_prompt
+  - set_fact: 
+      service: "{{ service_prompt.user_input }}"
+  when: service is not defined
+
+- name: "SERVICE - Ensure {{ service }} is stopped"
+  service:
+    name: "{{ service }}"
+    state: stopped

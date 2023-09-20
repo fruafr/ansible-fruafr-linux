@@ -1,0 +1,21 @@
+---
+# (c) Copyright: David HEURTEVENT, 2023
+# License: GPL 3.0
+
+# tasks file for service_enabled
+
+# Service at boot enabled
+
+- block:
+  - name: Set service name if not specified
+    pause:
+      prompt: "Enter the service name" 
+    register: service_prompt
+  - set_fact: 
+      service: "{{ service_prompt.user_input }}"
+  when: service is not defined
+
+- name: "SERVICE - Ensure {{ service }} is enabled at boot"
+  service:
+    name: "{{ service }}"
+    enabled: true

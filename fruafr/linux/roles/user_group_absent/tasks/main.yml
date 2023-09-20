@@ -2,6 +2,25 @@
 # tasks file for user_group_absent
 
 #User must be absent from group
+
+- block:
+  - name: Set username if not specified
+    pause:
+      prompt: "Enter the username" 
+    register: username_prompt
+  - set_fact: 
+      username: "{{ username_prompt.user_input }}"
+  when: username is not defined
+
+- block:
+  - name: Set groupname if not specified
+    pause:
+      prompt: "Enter the groupname to remove the user from"
+    register: groupname_prompt  
+  - set_fact: 
+      groupname: "{{ groupname_prompt.user_input }}"  
+  when: groupname is not defined
+
 - block:
   - name: "User {{ username }} absent from group {{ groupname }} (removed if needed) using deluser"
     become: true

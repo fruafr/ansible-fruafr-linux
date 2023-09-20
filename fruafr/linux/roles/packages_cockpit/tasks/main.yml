@@ -1,0 +1,73 @@
+---
+# (c) Copyright: David HEURTEVENT, 2023
+# License: GPL 3.0
+# tasks file for packages_cockpit
+
+# Install COCKPIT (WebUI)
+# https://cockpit-project.org/
+
+
+# Ubuntu
+#Install Cockpit on Ubuntu
+#https://www.techrepublic.com/article/install-cockpit-ubuntu-better-server/
+#Alternative
+#. /etc/os-release
+#sudo apt install -t ${VERSION_CODENAME}-backports cockpit
+#https://cockpit-project.org/running.html#ubuntu
+- block:
+
+  # tasks file for packages_snapd
+  - name: 'Check if cockpit is installed'
+    command: "dpkg-query -W cockpit"
+    register: package
+    failed_when: package.rc > 1
+    changed_when: package.rc == 1
+
+  #When not installed
+  - block:
+    #sudo apt-get update && sudo apt-get install -y cockpit
+    - name: 'APT update and cockpit installed'
+      become: true
+      ansible.builtin.apt:
+        pkg:
+          - cockpit
+        state: latest
+        update_cache: yes
+        cache_valid_time: 86400 #One day
+      register : cockpit_installed
+
+    #sudo apt-get install -y cockpit-machines
+    - name: 'APT update and cockpit installed'
+      become: true
+      ansible.builtin.apt:
+        pkg:
+          - cockpit-machines
+        state: latest
+      when: cockpit_installed and cockpit_machines
+
+    #sudo apt-get install -y cockpit-podman
+    - name: 'APT update and cockpit installed'
+      become: true
+      ansible.builtin.apt:
+        pkg:
+          - cockpit-podman
+        state: latest
+      when: cockpit_installed and cockpit_podman
+
+    when: package.rc == 1
+
+  when: ansible_distribution == "Ubuntu"
+
+#sudo systemctl enable --now cockpit
+- name: SERVICE - Ensure cockpit service enabled
+  service:
+    name: cockpit
+    enabled: yes
+  when: cockpit_installed is succeeded
+
+#sudo systemctl start cockpit
+- name: SERVICE - Ensure cockpit service started
+  service:
+    name: cockpit
+    state: started
+  when: cockpit_installed is succeeded

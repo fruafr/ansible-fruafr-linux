@@ -2,14 +2,13 @@
 # tasks file for user_sudo_add
 # User present in sudo group (added if necessary)
 
-- name: Set username if not specified
-  pause:
-    prompt: "Enter the username to be present in sudo group" 
-  register: username_prompt
-  when: username is not defined
-
-- set_fact: 
-    username: "{{ username_prompt.user_input }}"
+- block:
+  - name: Set username if not specified
+    pause:
+      prompt: "Enter the username to be present in sudo group" 
+    register: username_prompt
+  - set_fact: 
+      username: "{{ username_prompt.user_input }}"
   when: username is not defined
 
 - name: Sudo package must be installed

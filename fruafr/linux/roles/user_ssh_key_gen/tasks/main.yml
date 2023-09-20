@@ -2,6 +2,15 @@
 # tasks file for user_ssh_key_gen
 # Generate a ssh key for the user
 
+- block:
+  - name: Set username if not specified
+    pause:
+      prompt: "Enter the username" 
+    register: username_prompt
+  - set_fact: 
+      username: "{{ username_prompt.user_input }}"
+  when: username is not defined
+
 - name: "Generate a ssh key for user {{ username }}"
   become: true
   ansible.builtin.user:

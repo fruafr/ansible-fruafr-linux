@@ -2,6 +2,25 @@
 # tasks file for user_password_set
 # Set the user password
 
+
+- block:
+  - name: Set username if not specified
+    pause:
+      prompt: "Enter the username" 
+    register: username_prompt
+  - set_fact: 
+      username: "{{ username_prompt.user_input }}"
+  when: username is not defined
+
+- block:
+  - name: Set password if not specified
+    pause:
+      prompt: "Enter the password (will be hashed with sha512)"
+      echo: no
+    register: password_prompt  
+  - set_fact: 
+      password: "{{ password_prompt.user_input }}"  
+
 #passwd user
 - name: "Set the password for user {{ username }}"
   become: true

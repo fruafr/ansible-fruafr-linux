@@ -4,7 +4,7 @@
 - block:
   - name: Set username if not specified
     pause:
-      prompt: "Enter the username to be absent" 
+      prompt: "Enter the username to be absent/removed" 
     register: username_prompt
   - set_fact: 
       username: "{{ username_prompt.user_input }}"

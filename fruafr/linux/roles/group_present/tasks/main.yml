@@ -4,7 +4,7 @@
 - block:
   - name: Set groupname if not specified
     pause:
-      prompt: "Enter the groupname to be present"
+      prompt: "Enter the groupname to be present/added"
     register: groupname_prompt  
   - set_fact: 
       groupname: "{{ groupname_prompt.user_input }}"  

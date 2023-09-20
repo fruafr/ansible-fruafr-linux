@@ -5,7 +5,7 @@
 - block:
   - name: Set username if not specified
     pause:
-      prompt: "Enter the username" 
+      prompt: "Enter the username to be present/added" 
     register: username_prompt
   - set_fact: 
       username: "{{ username_prompt.user_input }}"

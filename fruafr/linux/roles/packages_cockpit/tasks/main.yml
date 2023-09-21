@@ -65,9 +65,9 @@
       name: cockpit
       enabled: yes
   #pause
-  - name: pause 5 seconds
+  - name: pause 15 seconds
     pause:
-      seconds: 5
+      seconds: 15
   #sudo systemctl start cockpit
   - name: SERVICE - Ensure cockpit service started
     service:

@@ -37,7 +37,7 @@
       register : cockpit_installed
 
     #sudo apt-get install -y cockpit-machines
-    - name: 'APT update and cockpit installed'
+    - name: 'APT update and cockpit-machines installed'
       become: true
       ansible.builtin.apt:
         pkg:
@@ -46,7 +46,7 @@
       when: cockpit_installed and cockpit_machines
 
     #sudo apt-get install -y cockpit-podman
-    - name: 'APT update and cockpit installed'
+    - name: 'APT update and cockpit-podman installed'
       become: true
       ansible.builtin.apt:
         pkg:

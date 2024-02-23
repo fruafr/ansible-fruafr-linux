@@ -31,6 +31,7 @@
   when: ansible_os_family == 'Debian'
 
 # Assumes EPEL is installed for RedHat distributions
+# https://snapcraft.io/docs/installing-snap-on-red-hat
 # RedHat family
 - block:
   #sudo dnf check-update && sudo dnf install -y [package]

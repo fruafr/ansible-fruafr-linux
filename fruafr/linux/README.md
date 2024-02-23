@@ -27,10 +27,11 @@ This collection contains the following roles:
     * file sharing (rsync, NFS, SMB/CIFS)
 - packages_cockpit : Install Cockpit
 - packages_etckeeper: Install ETCkeeper
-- packages_file_compression : Ensure latest version of file archive tools : zip bzip2 bzip3 p7zip unrar cabextract is installed
-- packages_hwsensors : Ensure latest version of hardware sensors / monitoring tools : hwinfo, lmsensors, smartmontools (SMART) is installed
+- packages_file_compression : Ensures latest version of file archive tools : zip bzip2 bzip3 p7zip unrar cabextract is installed
+- packages_hwsensors : Ensures latest version of hardware sensors / monitoring tools : hwinfo, lmsensors, smartmontools (SMART) is installed
 - packages_snapd: Ensures snapd is installed to latest version
 - packages_snapd_test : Test snapd with hello-world
+- packages_openzfs : Ensures zfs (openzfs) is installed to latest version
 
 ### service
 - service_cycle: Service is stopped and started (after a pause of 5 seconds)
@@ -68,6 +69,7 @@ GNU 3.0 or later
 David Heurtevent <david@heurtevent.org>
 
 ## Change History
-1.1.0 - Removed cockpit-machines and cockpit-podman from packages_cockpit, removed zfsutils from packages_base, version adapted for RedHat family (beta)
-1.0.1 - Removed unecessary/unused playbooks
-1.0.0 - Initial release
+- 1.2.0 - Added packages_openzfs
+- 1.1.0 - Removed cockpit-machines and cockpit-podman from packages_cockpit, removed zfsutils from packages_base, version adapted for RedHat family (beta)
+- 1.0.1 - Removed unecessary/unused playbooks
+- 1.0.0 - Initial release

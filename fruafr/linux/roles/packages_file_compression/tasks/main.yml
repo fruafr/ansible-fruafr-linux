@@ -3,7 +3,7 @@
 # License: GPL 3.0
 # tasks file for packages_file_compression
 
-# Ensure latest version of file archive tools : zip bzip2 bzip3 p7zip unrar cabextract is installed
+# Ensures latest version of file archive tools : zip bzip2 bzip3 p7zip unrar cabextract is installed
 
 # Debian
 - block:

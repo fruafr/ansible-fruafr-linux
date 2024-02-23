@@ -41,10 +41,12 @@
       state: latest
       filename: backports
       update_cache: yes
-    when: (ansible_distribution_release == 'jessie') or
-        (ansible_distribution_release == 'wheezy') or
+    when: (ansible_distribution_release == 'wheezy') or
+        (ansible_distribution_release == 'jessie') or
         (ansible_distribution_release == 'stretch') or
+        (ansible_distribution_release == 'buster') or
         (ansible_distribution_release == 'bullseye')
+
 
    # install package from backports
   - name: 'APT update and cockpit installed'

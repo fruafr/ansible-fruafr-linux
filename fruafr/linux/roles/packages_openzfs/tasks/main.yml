@@ -1,0 +1,89 @@
+---
+# (c) Copyright: David HEURTEVENT, 2023
+# License: GPL 3.0
+# tasks file for packages_hwsensors
+
+# Ensures zfs (openzfs) is installed to latest version
+
+# Debian
+- block:
+
+  # Enable backports repo with APT and update cache
+  - name: 'Enable backports repo with APT and update cache'
+    become: true
+    apt_repository:
+      repo: deb http://deb.debian.org/debian {{ ansible_distribution_release }}-backports main
+      state: latest
+      filename: backports
+      update_cache: yes
+    when: (ansible_distribution_release == 'wheezy') or
+        (ansible_distribution_release == 'jessie') or
+        (ansible_distribution_release == 'stretch') or
+        (ansible_distribution_release == 'buster') or
+        (ansible_distribution_release == 'bullseye')
+  
+#https://openzfs.github.io/openzfs-docs/Getting%20Started/Debian/index.html#installation
+#https://openzfs.github.io/openzfs-docs/Getting%20Started/Ubuntu/index.html
+  # apt update && apt install -y zfsutils-linux
+  - name : 'DEBIAN - apt install -y dpkg-dev linux-headers-generic linux-image-generic zfs-dkms zfsutils-linux'
+    become: true
+    ansible.builtin.apt:
+      pkg:
+        - dpkg-dev
+        - linux-headers-generic
+        - linux-image-generic
+        - zfs-dkms
+        - zfsutils-linux
+      state: latest
+      update_cache: true
+  when: ansible_os_family == 'Debian'
+
+# https://openzfs.github.io/openzfs-docs/Getting%20Started/RHEL-based%20distro/index.html
+# RedHat family
+- block:
+  #sudo dnf check-update && sudo dnf install -y [package]
+  - block:
+    - name: "DNF check-update and install zfs-release repo + kernel-devel"
+      become: true
+      ansible.builtin.dnf:
+        name:
+          - https://zfsonlinux.org/epel/zfs-release-2-3$(rpm --eval "%{dist}").noarch.rpm
+          - kernel-devel
+          - zfs
+        state: latest
+        update_cache: true
+
+    - name: "DNF check-update and install zfs"
+      become: true
+      ansible.builtin.dnf:
+        name:
+          - zfs
+        state: latest
+        update_cache: true  
+    when: ansible_distribution_major_version>7  
+
+  - block:
+    #sudo yum install -y [package]
+    - name: "yum install zfs-release repo + kernel-devel"
+      become: true
+      ansible.builtin.yum:
+        name: "{{ packages }}"
+        state: latest
+        update_cache: true
+      vars:
+        packages:
+          - https://zfsonlinux.org/epel/zfs-release-2-3$(rpm --eval "%{dist}").noarch.rpm
+          - kernel-devel
+
+    - name: "yum install -y zfs"
+      become: true
+      ansible.builtin.yum:
+        name: "{{ packages }}"
+        state: latest
+        update_cache: true
+      vars:
+        packages:
+          - zfs
+    when: ansible_distribution_major_version<=7  
+
+  when: ansible_os_family == 'RedHat'

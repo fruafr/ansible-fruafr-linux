@@ -3,7 +3,7 @@
 # License: GPL 3.0
 # tasks file for packages_hwsensors
 
-# Ensure latest version of hardware sensors / monitoring tools : hwinfo, lmsensors, smartmontools (SMART) is installed
+# Ensures latest version of hardware sensors / monitoring tools : hwinfo, lmsensors, smartmontools (SMART) is installed
 
 # Debian
 - block:

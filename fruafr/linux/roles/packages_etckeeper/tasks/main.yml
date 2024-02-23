@@ -3,6 +3,8 @@
 # License: GPL 3.0
 # tasks file for packages_etckeeper
 
+# Install etckeeper
+
 # Debian
 - block:
   #sudo apt-get update
@@ -17,7 +19,7 @@
     become: true
     apt:
       pkg: etckeeper
-      state: present
+      state: latest
     register: etckeeper_installed
   when: ansible_os_family == 'Debian'
 
@@ -30,8 +32,23 @@
       name:
         - etckeeper
         - git
-      state: present
-      update_cache: true  
+      state: latest
+      update_cache: true
+    when: ansible_distribution_major_version>7  
+
+  #sudo yum install -y [package]
+  - name: "yum install -y etckeeper git"
+    become: true
+    ansible.builtin.yum:
+      name: "{{ packages }}"
+      state: latest
+      update_cache: true
+    vars:
+      packages:
+        - etckeeper
+        - git
+    when: ansible_distribution_major_version<=7  
+
   when: ansible_os_family == 'RedHat'
 
 - block:

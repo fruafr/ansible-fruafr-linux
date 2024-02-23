@@ -1,10 +1,10 @@
 ---
 # (c) Copyright: David HEURTEVENT, 2023
 # License: GPL 3.0
-
 # tasks file for service_stopped
 
-# Service stopped
+# Service stopped (stop it if necessary)
+
 - block:
   - name: Set service name if not specified
     pause:

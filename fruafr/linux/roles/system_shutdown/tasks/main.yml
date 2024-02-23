@@ -4,7 +4,7 @@
 
 # tasks file for system_shutdown
 
-# Shutdown the system
+# Shut the system down (will loose ansible connection)
 
 - name: Shutdown
   become: true

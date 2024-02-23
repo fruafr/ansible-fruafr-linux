@@ -6,7 +6,6 @@
 # Install COCKPIT (WebUI)
 # https://cockpit-project.org/
 
-
 # Ubuntu
 #Install Cockpit on Ubuntu
 #https://www.techrepublic.com/article/install-cockpit-ubuntu-better-server/
@@ -15,13 +14,6 @@
 #sudo apt install -t ${VERSION_CODENAME}-backports cockpit
 #https://cockpit-project.org/running.html#ubuntu
 - block:
-
-  # tasks file for packages_snapd
-  - name: 'Check if cockpit is installed'
-    command: "dpkg-query -W cockpit"
-    register: package
-    failed_when: package.rc > 1
-    changed_when: package.rc == 1
 
   #When not installed
   - block:
@@ -36,28 +28,63 @@
         cache_valid_time: 86400 #One day
       register : cockpit_installed
 
-    #sudo apt-get install -y cockpit-machines
-    - name: 'APT update and cockpit-machines installed'
-      become: true
-      ansible.builtin.apt:
-        pkg:
-          - cockpit-machines
-        state: latest
-      when: cockpit_installed and cockpit_machines
-
-    #sudo apt-get install -y cockpit-podman
-    - name: 'APT update and cockpit-podman installed'
-      become: true
-      ansible.builtin.apt:
-        pkg:
-          - cockpit-podman
-        state: latest
-      when: cockpit_installed and cockpit_podman
-
-    when: package.rc == 1
-
   when: ansible_distribution == "Ubuntu"
 
+# Debian
+- block:
+
+  # Enable backports repo with APT and update cache
+  - name: 'Enable backports repo with APT and update cache'
+    become: true
+    apt_repository:
+      repo: deb http://deb.debian.org/debian {{ ansible_distribution_release }}-backports main
+      state: latest
+      filename: backports
+      update_cache: yes
+    when: (ansible_distribution_release == 'jessie') or
+        (ansible_distribution_release == 'wheezy') or
+        (ansible_distribution_release == 'stretch') or
+        (ansible_distribution_release == 'bullseye')
+
+   # install package from backports
+  - name: 'APT update and cockpit installed'
+    become: true
+    ansible.builtin.apt:
+      pkg:
+        - cockpit
+      state: latest
+      update_cache: yes
+      cache_valid_time: 86400 #One day
+    register : cockpit_installed
+
+  when: ansible_os_family == "Debian" and ansible_distribution != "Ubuntu"
+
+# RedHat systems
+- block:
+
+    # RHEL version 7 (CentOS 7)
+    - name: 'RHEL 7 - install cockpit with yum'
+      become: true
+      ansible.builtin.yum:
+        name: cockpit
+        state: latest
+        update_cache: yes
+      when: ansible_distribution_major_version==7
+      register : cockpit_installed
+
+    # RHEL > 7 (Fedora, Almalinux, Rockylinux)
+    - name: 'RHEL 7 - install cockpit with dnf'
+      become: true
+      ansible.builtin.dnf:
+        name: cockpit
+        state: latest
+        update_cache: yes
+      when: ansible_distribution_major_version>7 
+      register : cockpit_installed
+
+  when: ansible_os_family == "RedHat"
+
+## COMMON
 - block:
   #sudo systemctl enable --now cockpit
   - name: SERVICE - Ensure cockpit service enabled

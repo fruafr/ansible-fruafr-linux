@@ -3,6 +3,8 @@
 # License: GPL 3.0
 # tasks file for git_commit_push
 
+# Git commit push routine
+
 #Add files to the commit
 - name: "git add for directory {{ git_directory }}"
   shell: git add .

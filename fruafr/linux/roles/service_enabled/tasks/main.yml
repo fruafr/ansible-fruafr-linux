@@ -4,7 +4,7 @@
 
 # tasks file for service_enabled
 
-# Service at boot enabled
+# Service enabled (will attempt to start automatically at boot time)
 
 - block:
   - name: Set service name if not specified

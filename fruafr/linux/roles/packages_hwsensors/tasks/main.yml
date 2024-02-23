@@ -3,6 +3,8 @@
 # License: GPL 3.0
 # tasks file for packages_hwsensors
 
+# Ensure latest version of hardware sensors / monitoring tools : hwinfo, lmsensors, smartmontools (SMART) is installed
+
 # Debian
 - block:
   # apt-get install hwinfo lm-sensors smartmontools
@@ -15,17 +17,45 @@
         - smartmontools
       state: latest
       update_cache: true
-
-  - name: Add the drivetemp module
-    become: true 
-    # modprobe drivetemp
-    # echo drivetemp > /etc/modules-load.d/drivetemp.conf
-    # echo drivetemp | sudo tee -a /etc/modules 
-    community.general.modprobe:
-      name: drivetemp
-      state: present
-
   when: ansible_os_family == 'Debian'
+
+# RedHat family
+- block:
+  #sudo dnf check-update && sudo dnf install -y [package]
+  - name: "DNF check-update and install hwinfo lm_sensors smartmontools"
+    become: true
+    ansible.builtin.dnf:
+      name:
+        - hwinfo
+        - lm_sensors
+        - smartmontools
+      state: latest
+      update_cache: true
+    when: ansible_distribution_major_version>7  
+
+  #sudo yum install -y [package]
+  - name: "yum install -y hwinfo lm_sensors smartmontools"
+    become: true
+    ansible.builtin.yum:
+      name: "{{ packages }}"
+      state: latest
+      update_cache: true
+    vars:
+      packages:
+        - hwinfo
+        - lm_sensors
+        - smartmontools
+    when: ansible_distribution_major_version<=7  
+  when: ansible_os_family == 'RedHat'
+
+- name: Add the drivetemp module
+  become: true 
+  # modprobe drivetemp
+  # echo drivetemp > /etc/modules-load.d/drivetemp.conf
+  # echo drivetemp | sudo tee -a /etc/modules 
+  community.general.modprobe:
+    name: drivetemp
+    state: present
 
 # Read hwinfo
 - shell: hwinfo

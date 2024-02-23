@@ -4,7 +4,7 @@
 
 # tasks file for user_present
 
-# User must be present/added
+# User must be present (Created if necessary)
 
 - block:
   - name: Set username if not specified

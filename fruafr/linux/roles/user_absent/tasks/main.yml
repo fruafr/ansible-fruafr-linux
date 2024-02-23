@@ -4,7 +4,7 @@
 
 # tasks file for user_absent
 
-# User absent/removed
+# User must be absent (Removed if necessary)
 
 - block:
   - name: Set username if not specified

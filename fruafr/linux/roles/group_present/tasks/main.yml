@@ -3,6 +3,8 @@
 # License: GPL 3.0
 # tasks file for group_present
 
+# Group must be present (created if necessary)
+
 - block:
   - name: Set groupname if not specified
     pause:

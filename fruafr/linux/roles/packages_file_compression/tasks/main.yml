@@ -3,19 +3,20 @@
 # License: GPL 3.0
 # tasks file for packages_file_compression
 
+# Ensure latest version of file archive tools : zip bzip2 bzip3 p7zip unrar cabextract is installed
+
 # Debian
 - block:
   # sudo apt-get install [packages]
-  - name: 'DEBIAN - file compression packages installed : zip, bzip2, bzip3, arc, 7zip, p7zip, rar, cabextract'
+  - name: 'DEBIAN - file compression packages installed : zip, bzip2, bzip3, 7zip, p7zip, unrar, cabextract'
     become: true
     ansible.builtin.apt:
       pkg:
         - zip
         - bzip2
-        - arc
         - 7zip
         - p7zip
-        - rar
+        - unrar
         - cabextract
       state: latest
     
@@ -29,3 +30,41 @@
     when: (ansible_distribution == 'Debian') and (ansible_distribution_major_version >= 12)
     
   when: ansible_os_family == 'Debian'
+
+- block:
+  # RedHat >7
+  - block:
+    #sudo dnf check-update && sudo dnf install -y [packages]
+    - name: "DNF check-update and install zip bzip2 bzip3 p7zip unrar-free cabextract"
+      become: true
+      ansible.builtin.dnf:
+        name:
+          - zip
+          - bzip2
+          - bzip3
+          - p7zip
+          - unrar-free
+          - cabextract
+        state: latest
+        update_cache: true  
+    when: ansible_distribution_major_version >7
+
+  # RedHat <=7
+  - block:
+    #sudo yum install -y [packages]
+    - name: "yum install -y etckeeper zip bzip2 bzip3 p7zip unrar-free cabextract"
+      become: true
+      ansible.builtin.yum:
+        name: "{{ packages }}"
+        state: latest
+        update_cache: true
+      vars:
+        packages:
+          - zip
+          - bzip2
+          - bzip3
+          - p7zip
+          - unrar-free
+          - cabextract
+    when: ansible_distribution_major_version <=7
+  when: ansible_os_family == 'RedHat'

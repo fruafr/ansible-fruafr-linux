@@ -4,7 +4,7 @@
 
 # tasks file for user_group_absent
 
-# User must be absent/removed from group
+# User must be absent from group (removed if necessary)
 
 - block:
   - name: Set username if not specified

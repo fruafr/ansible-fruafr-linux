@@ -4,7 +4,7 @@
 
 # tasks file for system_reboot
 
-# Reboot the system
+# Restart the system (will loose ansible connection)
 
 - name: Reboot
   become: true

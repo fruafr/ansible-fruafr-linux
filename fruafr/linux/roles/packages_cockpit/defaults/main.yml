@@ -3,8 +3,3 @@
 # License: GPL 3.0
 # defaults file for packages_cockpit
 
-#Support for KVM machines
-cockpit_machines: false
-
-#Support for Podman containers (alternative mostly compatible with Docker)
-cockpit_podman: false

@@ -4,7 +4,7 @@
 
 # tasks file for service_disabled
 
-# Service at boot disabled
+# Service disabled (won't start at boot time)
 
 - block:
   - name: Set service name if not specified

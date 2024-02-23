@@ -3,6 +3,17 @@
 # License: GPL 3.0
 # tasks file for packages_base
 
+# Ensures a selection of base packages is installed to latest version : 
+# - editors (nano, vim), 
+# - compression (tar, gzip, zlib), 
+# - downloaders (curl, wget), 
+# - certificates/encryption (ca-certfificates, gpg)
+# - sudo
+# - file versionning (git)
+# - utils (htop, screen, parted)
+# - file sharing (rsync, NFS, SMB/CIFS)
+# - ...
+
 # Debian
 - block:
   # apt-get install [packages]
@@ -23,7 +34,7 @@
       state: latest
       update_cache: true
 
-  - name: 'DEBIAN - Typical base system packages found in Ubuntu 22.04 installed : sudo, git, lsb-release, rsync, gpg, zfsutils-linux, software-properties-common, vim, screen, parted'
+  - name: 'DEBIAN - Typical base system packages found in Ubuntu 22.04 installed : sudo, git, lsb-release, rsync, gpg, software-properties-common, vim, screen, parted'
     become: true
     ansible.builtin.apt:
       pkg:
@@ -32,21 +43,123 @@
         - lsb-release
         - rsync
         - gpg
-        - zfsutils-linux
         - software-properties-common
         - vim
         - screen
         - parted
       state: latest
 
-  - name: 'DEBIAN - useful system packages installed : nfs-common, htop, apt-transport-https, memstat'
+  - name: 'DEBIAN - useful system packages installed : nfs-common, htop, apt-transport-https, smbclient, cifs-utils'
     become: true
     ansible.builtin.apt:
       pkg:
         - nfs-common
         - htop
         - apt-transport-https
-        - memstat
+        - smbclient
+        - cifs-utils
       state: latest
 
   when: ansible_os_family == 'Debian'
+
+# RedHat
+- block:
+
+  # apt-get install [packages]
+  - name : 'REDHAT - YUM - Base system packages installed : nano, curl, ca-certificates, gnupg2, wget, cronie, crontabls, vim-common, tar, gzip, zlib'
+    become: true
+    ansible.builtin.yum:
+      name: "{{ packages }}"
+      state: latest
+      update_cache: true
+    vars:
+      packages:
+        - nano
+        - curl
+        - ca-certificates
+        - gnupg2
+        - wget
+        - cronie
+        - crontabs
+        - vim-common
+        - tar
+        - gzip
+        - zlib
+
+  - name: 'REDHAT - YUM - Typical base system packages : sudo, git, rsync, kgpg, vim, screen, parted'
+    become: true
+    ansible.builtin.yum:
+      name: "{{ packages }}"
+      state: latest
+    vars:
+      packages:
+        - sudo
+        - git
+        - rsync
+        - kgpg
+        - vim
+        - screen
+        - parted
+
+  - name: 'REDHAT - YUM - useful system packages installed : libnfs, nfs-utils, htop, libsmbclient, cifs-utils'
+    become: true
+    ansible.builtin.yum:
+      name: "{{ packages }}"
+      state: latest
+    vars:
+      packages:
+        - libnfs
+        - nfs-utils
+        - htop
+        - libsmbclient
+        - cifs-utils
+
+  when: ansible_os_family == 'RedHat' and ansible_distribution_major_version==7
+
+# RedHat
+- block:
+
+  # apt-get install [packages]
+  - name : 'REDHAT - DNF - Base system packages installed : nano, curl, ca-certificates, gnupg2, wget, cronie, crontabls, vim-common, tar, gzip, zlib'
+    become: true
+    ansible.builtin.dnf:
+      name:
+        - nano
+        - curl
+        - ca-certificates
+        - gnupg2
+        - wget
+        - cronie
+        - crontabs
+        - vim-common
+        - tar
+        - gzip
+        - zlib
+      state: latest
+      update_cache: true
+
+  - name: 'REDHAT - DNF - Typical base system packages : sudo, git, rsync, kgpg, vim, screen, parted'
+    become: true
+    ansible.builtin.dnf:
+      name:
+        - sudo
+        - git
+        - rsync
+        - kgpg
+        - vim
+        - screen
+        - parted
+      state: latest
+
+  - name: 'REDHAT - DNF - useful system packages installed : libnfs, nfs-utils, htop, libsmbclient, cifs-utils'
+    become: true
+    ansible.builtin.dnf:
+      name:
+        - libnfs
+        - nfs-utils
+        - htop
+        - libsmbclient
+        - cifs-utils
+      state: latest
+  when: ansible_os_family == 'RedHat' and ansible_distribution_major_version > 7
+

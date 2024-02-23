@@ -4,7 +4,7 @@
 
 # tasks file for system_poweroff
 
-# Poweroff the system
+# Poweroff the system (will loose ansible connection)
 
 - name: poweroff
   become: true

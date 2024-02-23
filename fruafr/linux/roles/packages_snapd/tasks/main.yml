@@ -64,8 +64,8 @@
   # sudo ln -s /var/lib/snapd/snap /snap
   - name : symlink - /var/lib/snapd/snap /snap
     ansible.builtin.file:
-      src: /snap
-      dest: /var/lib/snapd/snap
+      src: /var/lib/snapd/snap
+      dest: /snap
       owner: root
       group: root
       state: link

@@ -14,15 +14,30 @@
 
   #sudo apt-get install etckeeper
   - name: APT - install etckeeper
+    become: true
     apt:
       pkg: etckeeper
       state: present
     register: etckeeper_installed
   when: ansible_os_family == 'Debian'
 
+#RedHat
+- block:
+  #sudo dnf check-update && sudo dnf install -y [package]
+  - name: "DNF check-update and install etckeeper git"
+    become: true
+    ansible.builtin.dnf:
+      name:
+        - etckeeper
+        - git
+      state: present
+      update_cache: true  
+  when: ansible_os_family == 'RedHat'
+
 - block:
   #systemctl enable --now etckeeper
   - name: SERVICE - Ensure etckeeper service enabled
+    become: true
     service:
       name: etckeeper
       enabled: yes
@@ -31,18 +46,22 @@
   - block:
       #systemctl start etckeeper
     - name: SERVICE - Ensure etckeeper service started
+      become: true
       service:
         name: etckeeper
         state: started
+      when: ansible_os_family == 'Debian'
 
     #ls /etc/.git
     - name: Test if /etc/.git is present
+      become: true
       stat:
-        path: /etc/.git
+          path: /etc/.git
       register: etc_git
 
     #mkdir /etc/.git
     - name: ETCKEEPER - Initialize if /etc/.git not present
+      become: true
       command:
         cmd: etckeeper init
         creates: /etc/.git
@@ -51,6 +70,7 @@
 
     #etckeeper commit "Initial commit"
     - name: ETCKEEPER - Initial commit if initialized
+      become: true
       command:
         cmd: etckeeper commit "Initial commit"
       when: etc_initialized is not skipped

@@ -1,9 +1,0 @@
----
-# (c) Copyright: David HEURTEVENT, 2023
-# License: GPL 3.0
-# Install snapd
-- hosts: all
-  collections:
-    - fruafr.linux
-  roles:
-    - packages_snapd
